@@ -1,0 +1,4 @@
+namespace: blog-fe
+resources:
+  - config-map.yaml
+  - ../../base

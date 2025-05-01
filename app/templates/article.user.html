@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %} - {{ post.title }} {% endblock %}
+{% block content %} 
+<style>
+    .gradient-bg {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+    .tag-pill {
+        transition: all 0.3s ease;
+    }
+    .tag-pill:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .comment-box {
+        transition: all 0.3s ease;
+    }
+    .comment-box:hover {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    .sidebar-card {
+        transition: all 0.3s ease;
+    }
+    .sidebar-card:hover {
+        transform: translateX(5px);
+    }
+</style>
+<div class="flex flex-col lg:flex-row gap-8">
+    <!-- Main Content -->
+    <div class="lg:w-2/3">
+        <!-- Article -->
+        <article class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+            <img src="{{ post.image }}" alt="Cloud computing" class="w-full h-64 object-cover">
+            
+            <div class="p-6">
+                <div class="flex items-center mb-4">
+                    <span class="text-sm text-gray-500">
+                        <i class="far fa-calendar-alt mr-1"></i> {{ post.created_at or "In bozza" }}
+                    </span>
+                    <span class="mx-2 text-gray-300">|</span>
+                    <span class="text-sm text-gray-500">
+                        <i class="far fa-clock mr-1"></i> {{ post.read_time }} read
+                    </span>
+                </div>
+                
+                <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ post.title }}</h1>
+                
+                <div class="flex flex-wrap gap-2 mb-6">
+                    {% for tag in post.tags[:3] %}
+                        <a href="/posts?tags={{tag}}" target="_blank" class="tag-pill bg-blue-100 hover:bg-blue-300 text-blue-800 px-3 py-1 rounded-full text-sm font-medium hover:cursor-pointer">#{{tag}}</a>
+                    {% endfor %}
+                </div>
+                
+                <div class="max-w-none text-gray-700 mb-6 prose"><!-- Don't set the `src` attribute -->
+                    <zero-md>
+                      <!-- Write your markdown inside a `<script type="text/markdown">` tag -->
+                      <script type="text/markdown">
+                        {{ post.body }}
+                      </script>
+                    </zero-md>
+                </div>
+            </div>
+        </article>
+    </div>
+    
+    <!-- Sidebar -->
+    <aside class="lg:w-1/3">
+        <!-- About Author -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 mb-6">
+            <div class="flex items-center">
+                <img src="{{ post.user.image or '/static/images/bot.png' }}" alt="Author" class="w-16 h-16 rounded-full mr-4">
+                <div>
+                    <p class="font-bold text-gray-800">{{ post.user.name or 'Copywriter AI' }}</p>
+                    <p class="text-sm text-gray-600">{{ post.user.role or 'Publisher' }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Related Tags -->
+        {% if post.tags|length > 0 %}
+        <div class="bg-white rounded-xl shadow-md overflow-hidden p-6">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">
+                <i class="fas fa-hashtag mr-2 text-blue-600"></i> Related Tags
+            </h2>
+            <div class="flex flex-wrap gap-2">
+                {% for tag in post.tags %}
+                <a href="/posts?tags={{tag.tag}}" target="_blank" class="tag-pill bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium hover:bg-blue-200">#{{tag}}</a>
+                {%endfor%}
+            </div>
+        </div>
+        {%endif%}
+
+        <!-- Popular Tags -->
+        {% if popular_tags.result|length > 0 %}
+        <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 mt-6">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">
+                <i class="fas fa-hashtag mr-2 text-green-600"></i> Popular Tags
+            </h2>
+            <div class="flex flex-wrap gap-2">
+                {% for tag in popular_tags.result %}
+                <a href="/posts?tags={{tag.tag}}" target="_blank" class="tag-pill bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium hover:bg-blue-200">#{{tag.tag}}</a>
+                {%endfor%}
+            </div>
+        </div>
+        {%endif%}
+    </aside>
+</div>
+
+{%endblock%}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/gh/MarketingPipeline/Markdown-Tag/markdown-tag.js"></script> 
+{%endblock%}

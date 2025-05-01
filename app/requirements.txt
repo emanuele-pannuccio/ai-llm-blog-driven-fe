@@ -1,0 +1,5 @@
+flask
+setuptools
+flask-http-middleware
+flask-jwt-extended
+requests

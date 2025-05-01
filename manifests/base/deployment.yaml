@@ -1,0 +1,25 @@
+# deployment.yaml (modificato)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-fe-deployment
+  labels:
+    app: blog-fe-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog-fe-app
+  template:
+    metadata:
+      labels:
+        app: blog-fe-app
+    spec:
+      serviceAccountName: blog-fe-sa
+      containers:
+        - name: blog-fe
+          image: app-image
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: blog-fe-config

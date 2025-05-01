@@ -1,0 +1,8 @@
+# config-map.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: blog-fe-config
+data:
+  HTTP_HOST: 'https://x.nip.io'
+  INTERNAL_BACKEND_URL: "http://blog-be-service.blog-be.svc.cluster.local:8080"

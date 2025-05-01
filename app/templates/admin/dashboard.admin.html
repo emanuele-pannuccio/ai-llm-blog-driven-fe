@@ -1,0 +1,160 @@
+{% extends 'bases/admin.html' %}
+
+{% block title %} - Dashboard {% endblock %}
+
+{% block content %} 
+<div class="flex flex-col flex-1 overflow-hidden">
+    <!-- Top Navigation -->
+    <div class="flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200">
+        <div class="flex items-center">
+            <button class="md:hidden text-gray-500 mr-2">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+            <h1 class="text-xl font-semibold text-gray-800">Dashboard</h1>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 overflow-auto p-4">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="select-none pointer-events-none dashboard-card bg-white p-6 rounded-lg shadow transition duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Post</p>
+                        <p class="text-2xl font-bold text-gray-800 mt-1">
+                            {{ post|length }}
+                        </p>
+                    </div>
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                        <i class="fas fa-newspaper text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="select-none pointer-events-none dashboard-card bg-white p-6 rounded-lg shadow transition duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Utenti</p>
+                        <p class="text-2xl font-bold text-gray-800 mt-1">
+                            {{ user|length }}
+                        </p>
+                    </div>
+                    <div class="p-3 rounded-full bg-red-100 text-red-600">
+                        <i class="fas fa-users text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="select-none pointer-events-none dashboard-card bg-white p-6 rounded-lg shadow transition duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Tags</p>
+                        <p class="text-2xl font-bold text-gray-800 mt-1">
+                            {{ tag|length }}
+                        </p>
+                    </div>
+                    <div class="p-3 rounded-full bg-green-100 text-green-600">
+                        <i class="fas fa-tags text-green-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="select-none pointer-events-none dashboard-card bg-white p-6 rounded-lg shadow transition duration-300">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Categorie</p>
+                        <p class="text-2xl font-bold text-gray-800 mt-1">
+                            {{ category|length }}
+                        </p>
+                    </div>
+                    <div class="p-3 rounded-full bg-indigo-100 text-indigo-600">
+                        <i class="fas fa-folder-open text-indigo-500 text-xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Articles and Activity -->
+        <div class="grid grid-cols-1 gap-4">
+            <!-- Recent Articles -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-gray-800">Post recenti</h2>
+                    <a href="/admin/posts" class="text-sm text-blue-500 hover:underline">Vedi tutti</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider select-none pointer-events-none">Titolo</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider select-none pointer-events-none">Autore</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider select-none pointer-events-none">Data</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider select-none pointer-events-none">Stato</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for post_ in post %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap min-w-48 max-w-64 truncate overflow-hidden">
+                                    <a href="/post/{{post_.id}}" class="text-sm font-medium text-gray-900">{{ post_.title }}</a>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap select-none pointer-events-none">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-8 w-8">
+                                            <img class="h-8 w-8 rounded-full" src="{{post_.user.image if post_.user != None else '/static/images/bot.png'}}" alt="">
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900">{{post_.user.name if post_.user != None else "Copywriter Agent"}}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap select-none pointer-events-none">
+                                    <div class="text-sm text-gray-500">{{post_.created_at if post_.created_at else 'In bozza'}}</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap select-none pointer-events-none">
+                                    {%if post_.status == "review" %}
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">{{post_.status|capitalize}}</span>
+                                    {%else%}
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">{{post_.status|capitalize}}</span>
+                                    {%endif%}
+
+                                </td>
+                            </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+            <a href="#" class="bg-white p-6 rounded-lg shadow flex items-center justify-between hover:bg-purple-50 transition">
+                <div>
+                    <h3 class="text-lg font-medium text-gray-800">Visualizza utenti</h3>
+                    <p class="text-sm text-gray-500 mt-1">Aggiungi o modifica categorie</p>
+                </div>
+                <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                    <i class="fas fa-tags text-xl"></i>
+                </div>
+            </a>
+            <a href="#" class="bg-white p-6 rounded-lg shadow flex items-center justify-between hover:bg-blue-50 transition">
+                <div>
+                    <h3 class="text-lg font-medium text-gray-800">Nuovo articolo</h3>
+                    <p class="text-sm text-gray-500 mt-1">Crea un nuovo post per il blog</p>
+                </div>
+                <div class="px-4 py-3 rounded-full bg-blue-100 text-blue-600">
+                    <i class="fas fa-plus text-xl"></i>
+                </div>
+            </a>
+            <a href="#" class="bg-white p-6 rounded-lg shadow flex items-center justify-between hover:bg-purple-50 transition">
+                <div>
+                    <h3 class="text-lg font-medium text-gray-800">Gestisci categorie</h3>
+                    <p class="text-sm text-gray-500 mt-1">Aggiungi o modifica categorie</p>
+                </div>
+                <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                    <i class="fas fa-tags text-xl"></i>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+{%endblock%}

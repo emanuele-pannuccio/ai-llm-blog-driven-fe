@@ -1,0 +1,348 @@
+{% extends 'bases/admin.html' %}
+
+{% block title %} - Dashboard {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block script_head %}
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="flex flex-col flex-1 overflow-hidden">
+    <!-- Top Navigatio n -->
+    <div class="flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200">
+        <div class="flex items-center">
+            <button class="md:hidden text-gray-500 mr-2">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+            <h1 class="text-xl font-semibold text-gray-800">Gestione Articoli</h1>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 overflow-auto p-6">
+        <!-- Action Bar -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
+            <div class="ml-auto flex space-x-3">
+              <div class="relative">
+                <input id="post-text-flt" value="{{request.args.get('text') if request.args.get('text') else '' }}" type="text" class="appearance-none pl-3 pr-8 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+              </div>
+              <div class="relative">
+                  <select id="stat-select-flt" class="appearance-none pl-3 pr-8 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                      <option value="">Tutti gli stati</option>
+                      {%for status_ in status%}
+                      <option  {{'selected' if request.args.get('status') == status_ else '' }} value="{{status_}}">{{status_|capitalize}}</option>
+                      {%endfor%}
+                  </select>
+                  <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400 pointer-events-none"></i>
+              </div>
+              <div class="relative">
+                  <select id="cat-select-flt" class="appearance-none pl-3 pr-8 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                    <option value="">Tutte le categorie</option>
+                    {%for category_ in category.result%}
+                    <option {{'selected' if request.args.get('category') == category_.name else '' }} value="{{category_.name}}">{{category_.name}}</option>
+                    {%endfor%}
+                  </select>
+                  <i class="fas fa-chevron-down absolute right-3 top-3 text-gray-400 pointer-events-none"></i>
+              </div>
+              <button id="flt-btn" class="px-8 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 flex items-center">
+                  <i class="fas fa-filter mr-2"></i> Filtra
+              </button>
+              <button id="add-article-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center">
+                  <i class="fas fa-plus mr-2"></i>
+                  <span>Nuovo articolo</span>
+              </button>
+            </div>
+        </div>
+
+        <!-- Articles Table -->
+        <div class="bg-white rounded-lg shadow overflow-hidden" >
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200" id="post-table">
+                    <thead class="bg-gray-50 select-none pointer-events-none">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Titolo
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Autore
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Categoria
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Tags
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Data
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Stato
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Azioni
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for post_ in post.result %}
+                        <!-- Article 1 -->
+                        <tr data-title="{{post_.title}}" data-id="{{post_.id}}" class="hover:bg-gray-50">
+                            <td class="px-6 py-4 select-none pointer-events-none">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-10 w-10">
+                                        <img class="h-10 w-10 rounded" src="{{ post_.image }}" alt="Article thumbnail">
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900 truncate overflow-hidden max-w-96">{{ post_.title }}</div>
+                                        <div class="text-sm text-gray-500">ID: {{ post_.id }}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap select-none pointer-events-none">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-8 w-8">
+                                        <img class="h-8 w-8 rounded-full" src="{{post_.user.image if post_.user != None else '/static/images/bot.png'}}" alt="">
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">{{post_.user.name if post_.user != None else "Copywriter Agent"}}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              {%if post_.category %}
+                              <a target="_blank" href="/posts?category={{post_.category}}" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 hover:bg-blue-200 text-blue-800 transition cursor-pointer select-none">
+                                  {{post_.category }}
+                              </a>
+                              {%else%}
+                              <a target="_blank" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 hover:bg-red-200 text-red-800 transition cursor-pointer select-none">
+                                  Non disponibile
+                              </a>
+                              {%endif%}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap max-w-80">
+                                <div class="flex flex-wrap gap-1">
+                                    {%for tag in post_.tags%}
+                                    <a href="/posts?tags={{tag}}" target="_blank" class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800 hover:bg-gray-200 transition cursor-pointer select-none">{{tag}}</a>
+                                    {%endfor%}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 pointer-events-none">
+                                <div>{{post_.created_at.split(" ")[0] if post_.created_at else 'In bozza'}}</div>
+                                <div class="text-xs text-gray-400">{{post_.created_at.split(" ")[1] if post_.created_at else ''}}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap select-none">
+                                {%if post_.status == "review" %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 hover:bg-red-200 text-red-800 transition cursor-pointer">{{post_.status|capitalize}}</span>
+                                {%elif post_.status == "archived" %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 hover:bg-gray-200 text-gray-800 transition cursor-pointer">{{post_.status|capitalize}}</span>
+                                {%else%}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 hover:bg-blue-200 text-blue-800 transition cursor-pointer select-none">{{post_.status|capitalize}}</span>
+                                {%endif%}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <div class="flex justify-end space-x-3">
+                                    {%if post_.status != "archived" %}
+                                    <button class="text-blue-600 hover:text-blue-900 edit-post-btn" title="Modifica">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-900 delete-post-btn" title="Elimina">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                    {%else%}
+                                    <button class="text-gray-600 hover:text-gray-900 restore-post-btn" title="Ripristina post">
+                                        <i class="fas fa-rotate-left"></i>
+                                    </button>
+                                    {%endif%}
+                                    <a href="/post/{{post_.id}}" target="_blank" class="text-green-600 hover:text-green-900" title="Anteprima">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                <div class="flex-1 flex justify-between sm:hidden">
+                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        Precedente
+                    </a>
+                    <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                        Successivo
+                    </a>
+                </div>
+                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                    <div>
+                        <p class="text-sm text-gray-700">
+                            Mostrando
+                            <span class="font-medium">{{post.page}}</span>
+                            a
+                            <span class="font-medium">{{post.total_pages}}</span>
+                            di
+                            <span class="font-medium">{{post.total_count}}</span>
+                            post
+                        </p>
+                    </div>
+                    <div>
+                        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                          
+                            {% if post.page > 1 %}
+                            <a href="/admin/posts/{{post.page-1}}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                <span class="sr-only">Precedente</span>
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                            {%endif%}
+
+                            {% for i in range([post.page - 5, 1]|max, post.total_pages+1)%}
+                              {% if post.page == i%}
+                                <a href="/admin/posts/{{i}}" aria-current="page" class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                  {{i}}
+                                </a>
+                              {% elif i < [post.page - 5, post.page]|max and i > post.page - 3 %}
+                                <a href="/admin/posts/{{i}}" aria-current="page" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">{{i}}</a>
+                              {%elif i == post.total_pages - 5 %}
+                                <a aria-current="page" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium pointer-events-none select-none">...</a>
+                              {%elif i > post.total_pages - 5%}
+                                <a href="/admin/posts/{{i}}" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                  {{i}}
+                                </a>
+                              {%endif%}
+                            {%endfor%}
+
+                            {% if post.page < post.total_pages %}
+                            <a href="/admin/posts/{{post.page+1}}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                <span class="sr-only">Successivo</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            {%endif%}
+                          </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Article Modal -->
+    <div data-mode="new" id="post-modal" class="hidden fixed inset-0 overflow-y-auto z-50">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-75 modal-overlay"></div>
+          </div>
+          <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+          <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div class="sm:flex sm:items-start">
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                  <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                      Post Editor
+                    </h3>
+                    <button id="close-modal" class="text-gray-400 hover:text-gray-500">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                  <div class="mt-2 space-y-4">
+                    <div>
+                      <label for="article-title" class="block text-sm font-medium text-gray-700">Titolo *</label>
+                      <input type="text" id="article-title" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Inserisci il titolo dell'articolo" required>
+                    </div>
+                    
+                    <div>
+                      <label for="article-content" class="block text-sm font-medium text-gray-700">Contenuto *</label>
+                      <textarea id="article-content" class="hidden"></textarea>
+                      <div id="editor-container"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label for="category" class="block text-sm font-medium text-gray-700">Categoria *</label>
+                        <select id="category" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                          <option value="">Seleziona categoria</option>
+                          {%for category_ in category.result%}
+                          <option value="{{category_.name}}">{{category_.name}}</option>
+                          {%endfor%}
+                        </select>
+                      </div>
+                      <div>
+                        <label class="block text-sm font-medium text-gray-700">Tags</label>
+                        <div class="tag-input-container mt-1">
+                          <input type="text" id="tag-input" class="tag-input border-1 w-full rounded-sm border-black" placeholder="Aggiungi tag e premi Invio">
+                        </div>
+                        <input type="hidden" id="article-tags">
+                      </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label for="article-status" class="block text-sm font-medium text-gray-700">Stato *</label>
+                        <select id="article-status" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" required>
+                          <option value="">Seleziona stato</option>
+                          {%for status_ in status%}
+                          <option value="{{status_}}">{{status_|capitalize}}</option>
+                          {%endfor%}
+                        </select>
+                      </div>
+                      <div>
+                        <label for="article-date" class="block text-sm font-medium text-gray-700">Data di pubblicazione</label>
+                        <input type="date" id="article-date" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                      </div>
+                      <div>
+                        <label for="article-time" class="block text-sm font-medium text-gray-700">Ora di pubblicazione</label>
+                        <input type="time" id="article-time" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                      </div>
+                    </div>
+                    
+                    <div id="featured-image-container">
+                      <label for="article-featured-image" class="block text-sm font-medium text-gray-700">Immagine in evidenza</label>
+                      <div id="upload-area" class="upload-area mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                        <div class="space-y-1 text-center">
+                          <svg class="mx-auto h-48 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                          </svg>
+                          <div class="flex text-sm text-gray-600 justify-center">
+                            <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                              <span>Carica un'immagine</span>
+                              <input id="file-upload" name="file-upload" type="file" class="sr-only" accept="image/*">
+                            </label>
+                          </div>
+                          <p class="text-xs text-gray-500">
+                            PNG, JPG, GIF fino a 10MB
+                          </p>
+                        </div>
+                      </div>
+                      <div id="image-preview-container" class="hidden">
+                        <img id="image-preview" class="image-preview w-full h-full rounded-md" src="" alt="Anteprima immagine">
+                        <button id="remove-image" class="mt-2 text-sm text-red-600 hover:text-red-800">Rimuovi immagine</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <button type="button" id="save-article" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                Salva
+              </button>
+              <button type="button" id="cancel-article" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                Annulla
+              </button>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  var backend_url = '{{backend_url}}'
+</script>
+<script src="{{url_for('static', filename='js/admin/articles.admin.js')}}"></script>
+{%endblock%}
