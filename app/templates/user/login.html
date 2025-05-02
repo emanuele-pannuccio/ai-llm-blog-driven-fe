@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autenticazione | Blog Cloud</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,7 +21,7 @@
             overflow-x: hidden;
             min-height: 100vh;
         }
-        
+
         .cloud-bg {
             position: absolute;
             width: 100%;
@@ -30,44 +32,44 @@
             background-size: cover;
             z-index: 0;
         }
-        
+
         .form-container {
             position: relative;
             z-index: 1;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
-        
+
         .input-focus:focus {
             box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.5);
             border-color: #93c5fd;
         }
-        
+
         .toggle-password {
             cursor: pointer;
             transition: all 0.3s;
         }
-        
+
         .toggle-password:hover {
             color: #3b82f6;
         }
-        
+
         .tab-active {
             border-bottom: 3px solid #3b82f6;
             color: #3b82f6;
             font-weight: 600;
         }
-        
+
         .google-btn {
             transition: all 0.3s;
             border-color: #d1d5db;
         }
-        
+
         .google-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             background-color: #f8fafc;
         }
-        
+
         /* Cloud decorations */
         .cloud {
             position: absolute;
@@ -76,7 +78,7 @@
             opacity: 0.9;
             z-index: 0;
         }
-        
+
         .cloud-1 {
             width: 150px;
             height: 60px;
@@ -84,7 +86,7 @@
             left: 5%;
             animation: float 15s infinite ease-in-out;
         }
-        
+
         .cloud-2 {
             width: 200px;
             height: 80px;
@@ -92,7 +94,7 @@
             right: 10%;
             animation: float 18s infinite ease-in-out 2s;
         }
-        
+
         .cloud-3 {
             width: 180px;
             height: 70px;
@@ -100,11 +102,14 @@
             right: 25%;
             animation: float 20s infinite ease-in-out 4s;
         }
-        
+
         @keyframes float {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0) translateX(0);
             }
+
             50% {
                 transform: translateY(-20px) translateX(10px);
             }
@@ -112,26 +117,26 @@
     </style>
 
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
             // Form submission handlers
-            $('#loginForm').on('submit', function(e) {
+            $('#loginForm').on('submit', function (e) {
                 e.preventDefault();
                 const email = $('#login-email').val();
                 const password = $('#login-password').val();
 
                 $.ajax({
                     type: 'post',
-                    url: '{{ backend_url }}/token/',
+                    url: '{{ backend_url }}/token',
                     xhrFields: { withCredentials: true },
                     data: JSON.stringify({
                         "email": email,
                         "password": password
                     }),
                     contentType: "application/json",
-                }).done(function(data){
-                        window.location = '/'
-                }).fail(function(resp){
-                    if (resp.responseJSON?.message != undefined){
+                }).done(function (data) {
+                    window.location = '/'
+                }).fail(function (resp) {
+                    if (resp.responseJSON?.message != undefined) {
                         Swal.fire({
                             title: "Oops..",
                             text: resp.responseJSON.message,
@@ -140,8 +145,8 @@
                     }
                 });
             });
-            
-            $('#registerForm').on('submit', function(e) {
+
+            $('#registerForm').on('submit', function (e) {
                 e.preventDefault();
                 const email = $('#register-email').val();
                 const password = $('#register-password').val();
@@ -152,26 +157,26 @@
                     url: '{{ backend_url }}/user/',
                     xhrFields: { withCredentials: true },
                     data: JSON.stringify({
-                        "name" : name,
+                        "name": name,
                         "email": email,
                         "password": password
                     }),
                     dataType: "json",
                     contentType: "application/json",
-                }).done(function(){
+                }).done(function () {
                     $.ajax({
                         type: 'post',
-                        url: '{{ backend_url }}/token/',
+                        url: '{{ backend_url }}/token',
                         xhrFields: { withCredentials: true },
                         data: JSON.stringify({
                             "email": email,
                             "password": password
                         }),
                         contentType: "application/json",
-                    }).done(function(data){
+                    }).done(function (data) {
                         window.location = '/'
-                    }).fail(function(resp){
-                        if (resp.responseJSON?.message != undefined){
+                    }).fail(function (resp) {
+                        if (resp.responseJSON?.message != undefined) {
                             Swal.fire({
                                 title: "Oops..",
                                 text: resp.responseJSON.message,
@@ -179,14 +184,14 @@
                             });
                         }
                     })
-                }).fail(function(resp){
-                    if (resp.responseJSON?.message != undefined){
+                }).fail(function (resp) {
+                    if (resp.responseJSON?.message != undefined) {
                         Swal.fire({
                             title: "Oops..",
                             text: resp.responseJSON.message,
                             icon: "error"
                         });
-                    }else if (resp.responseJSON?.errors != undefined){
+                    } else if (resp.responseJSON?.errors != undefined) {
                         let errorMessages = [];
 
                         for (let field in resp.responseJSON.errors) {
@@ -210,10 +215,11 @@
     </script>
 
 </head>
+
 <body class="min-h-screen flex items-center justify-center p-4">
     <!-- Cloud background wave -->
     <div class="cloud-bg"></div>
-    
+
     <div class="form-container bg-white rounded-xl w-full max-w-md overflow-hidden">
         <!-- Tabs -->
         <div class="flex border-b">
@@ -228,7 +234,7 @@
         <!-- Login Form -->
         <div id="login-form" class="px-8 pt-8 pb-4">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Accedi al tuo account</h2>
-            
+
             <!-- Google SSO Button
             <button class="google-btn w-full flex items-center justify-center py-3 px-4 border rounded-lg mb-6">
                 <img src="https://www.google.com/favicon.ico" alt="Google" class="w-5 h-5 mr-2">
@@ -240,18 +246,23 @@
                 <span class="mx-4 text-gray-500">oppure</span>
                 <div class="flex-grow border-t border-gray-300"></div>
             </div> -->
-            
+
             <form id="loginForm">
                 <div class="mb-4">
                     <label for="login-email" class="block text-gray-700 text-sm font-medium mb-2">Email</label>
-                    <input type="text" id="login-email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none input-focus" placeholder="mario@example.com" required>
+                    <input type="text" id="login-email"
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none input-focus"
+                        placeholder="mario@example.com" required>
                 </div>
-                
+
                 <div class="mb-6 relative">
                     <label for="login-password" class="block text-gray-700 text-sm font-medium mb-2">Password</label>
                     <div class="relative">
-                        <input type="password" id="login-password" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none input-focus" placeholder="••••••••" required>
-                        <span class="toggle-password absolute right-3 top-3 text-gray-400" onclick="togglePassword('login-password')">
+                        <input type="password" id="login-password"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none input-focus"
+                            placeholder="••••••••" required>
+                        <span class="toggle-password absolute right-3 top-3 text-gray-400"
+                            onclick="togglePassword('login-password')">
                             <i class="far fa-eye"></i>
                         </span>
                     </div>
@@ -259,8 +270,9 @@
                         <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Password dimenticata?</a>
                     </div>
                 </div>
-                
-                <button type="submit" class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200">
+
+                <button type="submit"
+                    class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200">
                     Accedi
                 </button>
 
@@ -270,46 +282,60 @@
         <!-- Register Form (Hidden by default) -->
         <div id="register-form" class="hidden px-8 pt-8 pb-4">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Crea un nuovo account</h2>
-            
+
             <form id="registerForm">
                 <div class="mb-4">
-                    <label for="register-name" class="block text-gray-700 text-sm font-medium mb-2">Nome completo</label>
-                    <input type="text" id="register-name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none input-focus" placeholder="Mario Rossi" required>
+                    <label for="register-name" class="block text-gray-700 text-sm font-medium mb-2">Nome
+                        completo</label>
+                    <input type="text" id="register-name"
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none input-focus"
+                        placeholder="Mario Rossi" required>
                 </div>
-                
+
                 <div class="mb-4">
                     <label for="register-email" class="block text-gray-700 text-sm font-medium mb-2">Email</label>
-                    <input type="email" id="register-email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none input-focus" placeholder="mario@example.com" required>
+                    <input type="email" id="register-email"
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none input-focus"
+                        placeholder="mario@example.com" required>
                 </div>
-                
+
                 <div class="mb-4 relative">
                     <label for="register-password" class="block text-gray-700 text-sm font-medium mb-2">Password</label>
                     <div class="relative">
-                        <input type="password" id="register-password" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none input-focus" placeholder="••••••••" required>
-                        <span class="toggle-password absolute right-3 top-3 text-gray-400" onclick="togglePassword('register-password')">
+                        <input type="password" id="register-password"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none input-focus"
+                            placeholder="••••••••" required>
+                        <span class="toggle-password absolute right-3 top-3 text-gray-400"
+                            onclick="togglePassword('register-password')">
                             <i class="far fa-eye"></i>
                         </span>
                     </div>
                     <p class="text-xs text-gray-500 mt-1">Almeno 8 caratteri, con una lettera maiuscola e un numero</p>
                 </div>
-                
+
                 <div class="mb-6 relative">
-                    <label for="register-confirm-password" class="block text-gray-700 text-sm font-medium mb-2">Conferma Password</label>
+                    <label for="register-confirm-password" class="block text-gray-700 text-sm font-medium mb-2">Conferma
+                        Password</label>
                     <div class="relative">
-                        <input type="password" id="register-confirm-password" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none input-focus" placeholder="••••••••" required>
-                        <span class="toggle-password absolute right-3 top-3 text-gray-400" onclick="togglePassword('register-confirm-password')">
+                        <input type="password" id="register-confirm-password"
+                            class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none input-focus"
+                            placeholder="••••••••" required>
+                        <span class="toggle-password absolute right-3 top-3 text-gray-400"
+                            onclick="togglePassword('register-confirm-password')">
                             <i class="far fa-eye"></i>
                         </span>
                     </div>
                 </div>
-                
-                <button type="submit" class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200">
+
+                <button type="submit"
+                    class="w-full bg-blue-500 text-white py-3 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200">
                     Registrati
                 </button>
             </form>
-            
+
             <div class="mt-6 text-center">
-                <p class="text-gray-600">Hai già un account? <button onclick="switchToLogin()" class="text-blue-600 hover:text-blue-800 font-medium">Accedi</button></p>
+                <p class="text-gray-600">Hai già un account? <button onclick="switchToLogin()"
+                        class="text-blue-600 hover:text-blue-800 font-medium">Accedi</button></p>
             </div>
         </div>
         <div class="flex justify-start p-6">
@@ -319,4 +345,5 @@
 
     <script src="{{ url_for('static', filename='js/login.js') }}"></script>
 </body>
+
 </html>

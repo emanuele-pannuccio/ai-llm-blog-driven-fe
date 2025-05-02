@@ -2,7 +2,7 @@
 
 {% block title %} - Dashboard {% endblock %}
 
-{% block content %} 
+{% block content %}
 <div class="flex flex-col flex-1 overflow-hidden">
     <!-- Top Navigation -->
     <div class="flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200">
@@ -18,12 +18,13 @@
     <div class="flex-1 overflow-auto p-4">
         <!-- Stats Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div class="select-none pointer-events-none dashboard-card bg-white p-6 rounded-lg shadow transition duration-300">
+            <div
+                class="select-none pointer-events-none dashboard-card bg-white p-6 rounded-lg shadow transition duration-300">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500">Post</p>
                         <p class="text-2xl font-bold text-gray-800 mt-1">
-                            {{ post|length }}
+                            {{ post.result|length }}
                         </p>
                     </div>
                     <div class="p-3 rounded-full bg-blue-100 text-blue-600">
@@ -31,12 +32,13 @@
                     </div>
                 </div>
             </div>
-            <div class="select-none pointer-events-none dashboard-card bg-white p-6 rounded-lg shadow transition duration-300">
+            <div
+                class="select-none pointer-events-none dashboard-card bg-white p-6 rounded-lg shadow transition duration-300">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500">Utenti</p>
                         <p class="text-2xl font-bold text-gray-800 mt-1">
-                            {{ user|length }}
+                            {{ user.result|length }}
                         </p>
                     </div>
                     <div class="p-3 rounded-full bg-red-100 text-red-600">
@@ -44,12 +46,13 @@
                     </div>
                 </div>
             </div>
-            <div class="select-none pointer-events-none dashboard-card bg-white p-6 rounded-lg shadow transition duration-300">
+            <div
+                class="select-none pointer-events-none dashboard-card bg-white p-6 rounded-lg shadow transition duration-300">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500">Tags</p>
                         <p class="text-2xl font-bold text-gray-800 mt-1">
-                            {{ tag|length }}
+                            {{ tag.result|length }}
                         </p>
                     </div>
                     <div class="p-3 rounded-full bg-green-100 text-green-600">
@@ -57,12 +60,13 @@
                     </div>
                 </div>
             </div>
-            <div class="select-none pointer-events-none dashboard-card bg-white p-6 rounded-lg shadow transition duration-300">
+            <div
+                class="select-none pointer-events-none dashboard-card bg-white p-6 rounded-lg shadow transition duration-300">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-500">Categorie</p>
                         <p class="text-2xl font-bold text-gray-800 mt-1">
-                            {{ category|length }}
+                            {{ category.result|length }}
                         </p>
                     </div>
                     <div class="p-3 rounded-full bg-indigo-100 text-indigo-600">
@@ -84,36 +88,54 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider select-none pointer-events-none">Titolo</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider select-none pointer-events-none">Autore</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider select-none pointer-events-none">Data</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider select-none pointer-events-none">Stato</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider select-none pointer-events-none">
+                                    Titolo</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider select-none pointer-events-none">
+                                    Autore</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider select-none pointer-events-none">
+                                    Data</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider select-none pointer-events-none">
+                                    Stato</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            {% for post_ in post %}
+                            {% for post_ in post.result %}
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap min-w-48 max-w-64 truncate overflow-hidden">
-                                    <a href="/post/{{post_.id}}" class="text-sm font-medium text-gray-900">{{ post_.title }}</a>
+                                    <a href="/post/{{post_.id}}" class="text-sm font-medium text-gray-900">{{
+                                        post_.title }}</a>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap select-none pointer-events-none">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-8 w-8">
-                                            <img class="h-8 w-8 rounded-full" src="{{post_.user.image if post_.user != None else '/static/images/bot.png'}}" alt="">
+                                            <img class="h-8 w-8 rounded-full"
+                                                src="{{post_.user.image if post_.user != None else '/static/images/bot.png'}}"
+                                                alt="">
                                         </div>
                                         <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">{{post_.user.name if post_.user != None else "Copywriter Agent"}}</div>
+                                            <div class="text-sm font-medium text-gray-900">{{post_.user.name if
+                                                post_.user != None else "Copywriter Agent"}}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap select-none pointer-events-none">
-                                    <div class="text-sm text-gray-500">{{post_.created_at if post_.created_at else 'In bozza'}}</div>
+                                    <div class="text-sm text-gray-500">{{post_.created_at if post_.created_at else 'In
+                                        bozza'}}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap select-none pointer-events-none">
                                     {%if post_.status == "review" %}
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">{{post_.status|capitalize}}</span>
+                                    <span
+                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">{{post_.status|capitalize}}</span>
+                                    {%elif post_.status == "public" and post_.created_at_dt > now %}
+                                    <span
+                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-300 hover:bg-gray-400 text-gray-800 transition cursor-pointer">Scheduled</span>
                                     {%else%}
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">{{post_.status|capitalize}}</span>
+                                    <span
+                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">{{post_.status|capitalize}}</span>
                                     {%endif%}
 
                                 </td>
@@ -127,7 +149,8 @@
 
         <!-- Quick Actions -->
         <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-            <a href="#" class="bg-white p-6 rounded-lg shadow flex items-center justify-between hover:bg-purple-50 transition">
+            <a href="/admin/users"
+                class="bg-white p-6 rounded-lg shadow flex items-center justify-between hover:bg-purple-50 transition">
                 <div>
                     <h3 class="text-lg font-medium text-gray-800">Visualizza utenti</h3>
                     <p class="text-sm text-gray-500 mt-1">Aggiungi o modifica categorie</p>
@@ -136,7 +159,8 @@
                     <i class="fas fa-tags text-xl"></i>
                 </div>
             </a>
-            <a href="#" class="bg-white p-6 rounded-lg shadow flex items-center justify-between hover:bg-blue-50 transition">
+            <a href="/admin/posts"
+                class="bg-white p-6 rounded-lg shadow flex items-center justify-between hover:bg-blue-50 transition">
                 <div>
                     <h3 class="text-lg font-medium text-gray-800">Nuovo articolo</h3>
                     <p class="text-sm text-gray-500 mt-1">Crea un nuovo post per il blog</p>
@@ -145,7 +169,8 @@
                     <i class="fas fa-plus text-xl"></i>
                 </div>
             </a>
-            <a href="#" class="bg-white p-6 rounded-lg shadow flex items-center justify-between hover:bg-purple-50 transition">
+            <a href="/admin/categories"
+                class="bg-white p-6 rounded-lg shadow flex items-center justify-between hover:bg-purple-50 transition">
                 <div>
                     <h3 class="text-lg font-medium text-gray-800">Gestisci categorie</h3>
                     <p class="text-sm text-gray-500 mt-1">Aggiungi o modifica categorie</p>

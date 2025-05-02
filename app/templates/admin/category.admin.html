@@ -2,7 +2,7 @@
 
 {% block title %} - Dashboard {% endblock %}
 
-{% block content %} 
+{% block content %}
 <!-- Top Navigation -->
 <div class="flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200">
     <div class="flex items-center">
@@ -19,7 +19,8 @@
             <i class="fas fa-envelope text-xl"></i>
         </button>
         <div class="relative">
-            <input type="text" placeholder="Cerca categorie..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="text" placeholder="Cerca categorie..."
+                class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
             <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
         </div>
     </div>
@@ -78,12 +79,16 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
         <div class="flex space-x-3 ml-auto">
             <form action="/admin/categories" class="flex flex-row space-x-3" method="GET">
-                <input id="cat-text-flt" name="name" value="{{request.args.get('text') if request.args.get('text') else '' }}" type="text" class="appearance-none pl-3 pr-8 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-                <button id="flt-btn" class="px-8 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 flex items-center">
+                <input id="cat-text-flt" name="name"
+                    value="{{request.args.get('text') if request.args.get('text') else '' }}" type="text"
+                    class="appearance-none pl-3 pr-8 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                <button id="flt-btn"
+                    class="px-8 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 flex items-center">
                     <i class="fas fa-filter mr-2"></i> Filtra
                 </button>
             </form>
-            <button id="add-category-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center">
+            <button id="add-category-btn"
+                class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center">
                 <i class="fas fa-plus mr-2"></i>
                 <span>Nuova categoria</span>
             </button>
@@ -96,13 +101,16 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Nome
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col"
+                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Post pubblicati
                         </th>
-                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th scope="col"
+                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Azioni
                         </th>
                     </tr>
@@ -110,7 +118,7 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     <!-- Category 1 -->
                     {%for cat in category.result%}
-                    <tr  data-id="{{cat.id}}" class="hover:bg-gray-50">
+                    <tr data-id="{{cat.id}}" class="hover:bg-gray-50">
                         <td class="px-6 py-4">
                             <div class="flex items-center">
                                 <div class="ml-4">
@@ -134,14 +142,16 @@
                 </tbody>
             </table>
         </div>
-        
+
         <!-- Pagination -->
         <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
             <div class="flex-1 flex justify-between sm:hidden">
-                <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                <a href="#"
+                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
                     Precedente
                 </a>
-                <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                <a href="#"
+                    class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
                     Successivo
                 </a>
             </div>
@@ -158,22 +168,24 @@
                 <div>
                     <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                         {% if category.page > 1 %}
-                        <a href="/admin/categories/{{post.page-1}}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                        <a href="/admin/categories/{{post.page-1}}"
+                            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                             <span class="sr-only">Precedente</span>
                             <i class="fas fa-chevron-left"></i>
                         </a>
                         {%endif%}
                         {%for i in range(1, category.total_pages+1)%}
-                        <a href="#" aria-current="page" class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                        <a href="#" aria-current="page"
+                            class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
                             {{i}}
                         </a>
                         {%endfor%}
-                        {% if category.page < category.total_pages %}
-                        <a href="/admin/posts/{{post.page+1}}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                        {% if category.page < category.total_pages %} <a href="/admin/posts/{{post.page+1}}"
+                            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                             <span class="sr-only">Successivo</span>
                             <i class="fas fa-chevron-right"></i>
-                        </a>
-                        {%endif%}
+                            </a>
+                            {%endif%}
                     </nav>
                 </div>
             </div>
@@ -188,7 +200,8 @@
             <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div
+            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div class="sm:flex sm:items-start">
                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
@@ -197,18 +210,24 @@
                         </h3>
                         <div class="mt-2 space-y-4">
                             <div>
-                                <label for="category-name" class="block text-sm font-medium text-gray-700">Nome categoria</label>
-                                <input type="text" id="category-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Inserisci il nome della categoria">
+                                <label for="category-name" class="block text-sm font-medium text-gray-700">Nome
+                                    categoria</label>
+                                <input type="text" id="category-name"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                    placeholder="Inserisci il nome della categoria">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm", id="save-category-btn">
+                <button type="button"
+                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                    , id="save-category-btn">
                     Salva categoria
                 </button>
-                <button type="button" id="cancel-add-category" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                <button type="button" id="cancel-add-category"
+                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                     Annulla
                 </button>
             </div>
@@ -217,23 +236,23 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Add category modal
         const addCategoryBtn = document.getElementById('add-category-btn');
         const addCategoryModal = document.getElementById('add-category-modal');
         const cancelAddCategoryBtn = document.getElementById('cancel-add-category');
-        
+
         if (addCategoryBtn) {
-            addCategoryBtn.addEventListener('click', function() {
+            addCategoryBtn.addEventListener('click', function () {
                 addCategoryModal.classList.remove('hidden');
             });
         }
-        
-        cancelAddCategoryBtn.addEventListener('click', function() {
+
+        cancelAddCategoryBtn.addEventListener('click', function () {
             addCategoryModal.classList.add('hidden');
         });
 
-        $(".delete-cat-btn").click(function(){
+        $(".delete-cat-btn").click(function () {
             // console.log(
             Swal.fire({
                 title: "Sei sicuro?",
@@ -252,21 +271,21 @@
                         xhrFields: { withCredentials: true },
                         // contentType: "application/json",
                     })
-                    .done(() => {
-                        window.location.reload()
-                    })
-                    .fail((resp)=>{
-                        Swal.fire({
-                            icon: "error",
-                            title: "Error",
-                            html: resp.responseJSON?.message || "È avvenuto un'errore durante la richiesta, riprovare tra qualche istante.",
-                        });
-                    })
+                        .done(() => {
+                            window.location.reload()
+                        })
+                        .fail((resp) => {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                html: resp.responseJSON?.message || "È avvenuto un'errore durante la richiesta, riprovare tra qualche istante.",
+                            });
+                        })
                 }
             })
         })
 
-        $("#save-category-btn").click(function(){
+        $("#save-category-btn").click(function () {
 
             Swal.fire({
                 title: "Sei sicuro?",
@@ -283,21 +302,21 @@
                         type: 'post',
                         url: `${backend_url}/category/`,
                         data: JSON.stringify({
-                            "name" : $("#category-name").val()
+                            "name": $("#category-name").val()
                         }),
                         xhrFields: { withCredentials: true },
                         contentType: "application/json",
                     })
-                    .done(() => {
-                        window.location.reload()
-                    })
-                    .fail(()=>{
-                        Swal.fire({
-                            icon: "error",
-                            title: "Error",
-                            html: "È avvenuto un'errore durante la richiesta, riprovare tra qualche istante.",
-                        });
-                    })
+                        .done(() => {
+                            window.location.reload()
+                        })
+                        .fail(() => {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                html: "È avvenuto un'errore durante la richiesta, riprovare tra qualche istante.",
+                            });
+                        })
                 }
             })
         })
