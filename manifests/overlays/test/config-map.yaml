@@ -7,3 +7,4 @@ metadata:
 data:
   HTTP_HOST: "https://34.8.162.16.nip.io"
   INTERNAL_BACKEND_URL: "http://blog-be-service.blog-be.svc.cluster.local:8080"
+#
