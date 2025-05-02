@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: blog-fe-config
+  namespace: blog-fe
 data:
-  HTTP_HOST: 'https://34.8.250.66.nip.io'
+  HTTP_HOST: "https://34.8.162.16.nip.io"
   INTERNAL_BACKEND_URL: "http://blog-be-service.blog-be.svc.cluster.local:8080"
