@@ -300,7 +300,7 @@
                     Swal.showLoading()
                     $.ajax({
                         type: 'post',
-                        url: `${backend_url}/category/`,
+                        url: `${backend_url}/category`,
                         data: JSON.stringify({
                             "name": $("#category-name").val()
                         }),

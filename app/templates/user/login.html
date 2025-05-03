@@ -154,7 +154,7 @@
 
                 $.ajax({
                     type: 'post',
-                    url: '{{ backend_url }}/user/',
+                    url: '{{ backend_url }}/user',
                     xhrFields: { withCredentials: true },
                     data: JSON.stringify({
                         "name": name,
