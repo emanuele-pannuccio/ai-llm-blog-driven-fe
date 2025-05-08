@@ -59,4 +59,4 @@ def upload_image():
     return jsonify({'message': 'Immagine salvata con successo', 'path': "/"+filepath}), 200
 
 if __name__ == "__main__":
-    app.run(port=8083, host="0.0.0.0", debug=True)
+    app.run(port=8080, host="0.0.0.0", debug=True)
