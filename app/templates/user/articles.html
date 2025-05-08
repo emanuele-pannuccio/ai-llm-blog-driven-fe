@@ -187,8 +187,9 @@
                     </zero-md>
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
-                            <img src="{{post.user.image}}" alt="Author" class="w-8 h-8 rounded-full mr-2">
-                            <span class="text-sm text-gray-700">{{ post.user.name }}</span>
+                            <img src="{{post.user.image or '/static/images/bot.png'}}" alt="Author"
+                                class="w-8 h-8 rounded-full mr-2">
+                            <span class="text-sm text-gray-700">{{ post.user.name or 'Copywriter AI' }}</span>
                         </div>
                         <a href="/post/{{ post.id }}" class="text-indigo-600 font-medium read-more-btn">Leggi tutto <i
                                 class="fas fa-arrow-right ml-1"></i></a>
@@ -325,7 +326,7 @@
             // window.location = window.location + "&" + url[1]
         });
 
-        $.get(`${backend_url}/tag`).done(function (tags) {
+        $.get(`{{backend_url}}/tag`).done(function (tags) {
             tags = tags["result"]
             console.log(tags)
 

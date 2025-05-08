@@ -29,7 +29,7 @@ def admin_dashboard():
         data[resource] = resp.json()
     
     for post in data["post"]["result"]:
-        post["created_at_dt"] = datetime.strptime(post["created_at"], "%d/%m/%Y %H:%M").timestamp()
+        post["created_at_dt"] = datetime.strptime(post["created_at"], "%d/%m/%Y %H:%M").timestamp() if post["created_at"] else None
 
     data = {**data, "status" : ["review", "public", "archived"], "now": datetime.now(ZoneInfo("Europe/Rome")).timestamp()}
     
@@ -105,7 +105,7 @@ def admin_post(page):
     data = {**data, "status" : ["review", "public", "archived"], "now": datetime.now(ZoneInfo("Europe/Rome")).timestamp()}
 
     for post in data["post"]["result"]:
-        post["created_at_dt"] = datetime.strptime(post["created_at"], "%d/%m/%Y %H:%M").timestamp()
+        post["created_at_dt"] = datetime.strptime(post["created_at"], "%d/%m/%Y %H:%M").timestamp() if post["created_at"] else None
 
     if "post" in data.keys() and page > data["post"]["total_pages"] and page > 1:
         return redirect("/admin/posts")
