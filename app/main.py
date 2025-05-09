@@ -57,6 +57,6 @@ def upload_image():
     filepath = os.path.join(Options.UPLOAD_FOLDER, str(uuid4())+"_"+filename)
     file.save(filepath)
     return jsonify({'message': 'Immagine salvata con successo', 'path': "/"+filepath}), 200
-
+##
 if __name__ == "__main__":
     app.run(port=8080, host="0.0.0.0", debug=True)
