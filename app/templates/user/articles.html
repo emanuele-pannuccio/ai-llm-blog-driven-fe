@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'bases/base.html' %}
 
 {% block title %} - Posts {% endblock %}
-{% block content %} 
+{% block content %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
     .tag-filter-container {
@@ -12,14 +12,14 @@
         min-height: 3rem;
         /* padding: 0.5rem; */
     }
-    
+
     .tag-input-container {
         display: flex;
         flex-wrap: wrap;
         gap: 0.5rem;
         align-items: center;
     }
-    
+
     .tag-item {
         display: inline-flex;
         align-items: center;
@@ -30,20 +30,20 @@
         cursor: pointer;
         transition: all 0.2s ease;
     }
-    
+
     .tag-item:hover {
         background-color: #e5e7eb;
     }
-    
+
     .tag-item.selected {
         background-color: #3b82f6;
         color: white;
     }
-    
+
     .tag-item.selected:hover {
         background-color: #2563eb;
     }
-    
+
     .tag-input {
         flex-grow: 1;
         min-width: 120px;
@@ -52,11 +52,11 @@
         padding: 0.5rem;
         background: transparent;
     }
-    
+
     .tag-input::placeholder {
         color: #9ca3af;
     }
-    
+
     .clear-tags {
         color: #9ca3af;
         cursor: pointer;
@@ -64,11 +64,11 @@
         display: flex;
         align-items: center;
     }
-    
+
     .clear-tags:hover {
         color: #6b7280;
     }
-    
+
     .tag-dropdown {
         position: absolute;
         top: 100%;
@@ -84,30 +84,30 @@
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         display: none;
     }
-    
+
     .tag-dropdown-item {
         padding: 0.5rem 1rem;
         cursor: pointer;
         display: flex;
         align-items: center;
     }
-    
+
     .tag-dropdown-item:hover {
         background-color: #f9fafb;
     }
-    
+
     .tag-dropdown-item i {
         margin-right: 0.5rem;
         color: #9ca3af;
         font-size: 0.75rem;
     }
-    
+
     .selected-tags-container {
         margin-top: 0.5rem;
         padding-top: 0.5rem;
         border-top: 1px dashed #e5e7eb;
     }
-    
+
     .selected-tags-title {
         display: flex;
         align-items: center;
@@ -115,7 +115,7 @@
         color: #6b7280;
         margin-bottom: 0.25rem;
     }
-    
+
     .selected-tags-list {
         display: flex;
         flex-wrap: wrap;
@@ -129,16 +129,20 @@
         <div class="bg-white rounded-lg shadow p-4 mb-6">
             <div class="flex flex-col md:flex-row gap-4 flex-wrap">
                 <div class="relative flex-grow">
-                    <input id="search-post-text" type="text" placeholder="Cerca articoli..." {{ "value="+request.args.get('text') if request.args.get('text') else ''}} class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <input id="search-post-text" type="text" placeholder="Cerca articoli..." {{ "value="
+                        +request.args.get('text') if request.args.get('text') else '' }}
+                        class="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                 </div>
-                <select id="search-post-category" class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <select id="search-post-category"
+                    class="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     <option value="">Tutte le categorie</option>
                     {% for category in categories %}
-                        <option {{ "selected" if request.args.get('category') == category.name }}>{{ category.name }}</option>
+                    <option {{ "selected" if request.args.get('category')==category.name }}>{{ category.name }}</option>
                     {% endfor %}
                 </select>
-                <button id="search-post-filter" class="ml-auto bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+                <button id="search-post-filter"
+                    class="ml-auto bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
                     <i class="fas fa-filter mr-2"></i> Filtra
                 </button>
             </div>
@@ -149,17 +153,23 @@
 
             {% for post in posts %}
             <!-- Article 1 -->
-            <article class="bg-white rounded-lg shadow overflow-hidden article-card transition duration-300 relative select-none">
+            <article
+                class="bg-white rounded-lg shadow overflow-hidden article-card transition duration-300 relative select-none">
                 <div class="relative overflow-hidden">
                     <img src="{{ post.image }}" alt="{{ post.title }}" class="w-full h-48 article-image object-cover">
                 </div>
                 <div class="p-6">
                     <div class="flex items-center mb-2">
-                        <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2 py-0.5 rounded category-tag"><i class="fas fa-folder-open"></i> {{ post.category }}</span>
+                        <span
+                            class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2 py-0.5 rounded category-tag"><i
+                                class="fas fa-folder-open"></i> {{ post.category }}</span>
                         {% if user %}
-                        <span class="bg-red-100 ml-2 text-red-800 text-xs font-medium px-2 py-0.5 rounded category-tag"><i class="fas fa-eye"></i> {{ post.status|capitalize }}</span>
+                        <span
+                            class="bg-red-100 ml-2 text-red-800 text-xs font-medium px-2 py-0.5 rounded category-tag"><i
+                                class="fas fa-eye"></i> {{ post.status|capitalize }}</span>
                         {%endif%}
-                        <span class="text-gray-500 text-sm ml-auto"><i class="far fa-clock mr-1"></i> {{ post.read_time }} read</span>
+                        <span class="text-gray-500 text-sm ml-auto"><i class="far fa-clock mr-1"></i> {{ post.read_time
+                            }} read</span>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-2 truncate">{{ post.title }}</h3>
                     <zero-md class="mb-4 text-sm line-clamp-4">
@@ -169,16 +179,20 @@
                         </script>
                         <template data-append>
                             <style>
-                            p { color: rgb(125, 123, 123); }
+                                p {
+                                    color: rgb(125, 123, 123);
+                                }
                             </style>
                         </template>
                     </zero-md>
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
-                            <img src="{{post.user.image}}" alt="Author" class="w-8 h-8 rounded-full mr-2">
-                            <span class="text-sm text-gray-700">{{ post.user.name }}</span>
+                            <img src="{{post.user.image or '/static/images/bot.png'}}" alt="Author"
+                                class="w-8 h-8 rounded-full mr-2">
+                            <span class="text-sm text-gray-700">{{ post.user.name or 'Copywriter AI' }}</span>
                         </div>
-                        <a href="/post/{{ post.id }}" class="text-indigo-600 font-medium read-more-btn">Leggi tutto <i class="fas fa-arrow-right ml-1"></i></a>
+                        <a href="/post/{{ post.id }}" class="text-indigo-600 font-medium read-more-btn">Leggi tutto <i
+                                class="fas fa-arrow-right ml-1"></i></a>
                     </div>
                 </div>
             </article>
@@ -189,13 +203,19 @@
         {% if total_pages > 1 %}
         <div class="flex justify-center mt-10">
             <nav class="inline-flex rounded-md shadow">
-                <a href="/posts/{{ actual_page - 1 }}" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 {{ "pointer-events-none" if actual_page <= 1 else "" }}">
+                <a href="/posts/{{ actual_page - 1 }}"
+                    class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 {{ "
+                    pointer-events-none" if actual_page <=1 else "" }}">
                     <i class="fas fa-chevron-left"></i>
                 </a>
                 {% for i in range(total_pages) %}
-                    <a href="/posts/{{i+1}}" class="px-4 py-2 border-t border-b border-gray-300 bg-white font-medium {{ "pointer-events-none select-none bg-indigo-500 text-white" if i+1 == actual_page else " text-indigo-600" }}">{{ i+1 }}</a>
+                <a href="/posts/{{i+1}}" class="px-4 py-2 border-t border-b border-gray-300 bg-white font-medium {{ "
+                    pointer-events-none select-none bg-indigo-500 text-white" if i+1==actual_page
+                    else " text-indigo-600" }}">{{ i+1 }}</a>
                 {% endfor %}
-                <a href="/posts/{{ actual_page + 1}}" class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 {{ "pointer-events-none" if actual_page >= total_pages else "" }}">
+                <a href="/posts/{{ actual_page + 1}}"
+                    class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 {{ "
+                    pointer-events-none" if actual_page>= total_pages else "" }}">
                     <i class="fas fa-chevron-right"></i>
                 </a>
             </nav>
@@ -217,19 +237,22 @@
                         <div class="flex-shrink-0 relative">
                             <img src="{{ post.image }}" alt="Tech" class="w-16 h-16 rounded-lg object-cover">
                             {% if loop.index == 1 %}
-                                {% set color = 'bg-red-500' %}
+                            {% set color = 'bg-red-500' %}
                             {% elif loop.index == 2 %}
-                                {% set color = 'bg-orange-500' %}
+                            {% set color = 'bg-orange-500' %}
                             {% elif loop.index == 3 %}
-                                {% set color = 'bg-yellow-500' %}
+                            {% set color = 'bg-yellow-500' %}
                             {% elif loop.index == 4 %}
-                                {% set color = 'bg-gray-500' %}
+                            {% set color = 'bg-gray-500' %}
                             {% endif %}
 
-                            <span class="absolute -top-1 -left-1 {{ color }} text-white text-xs font-bold px-2 py-1 rounded">{{ loop.index }}</span>
+                            <span
+                                class="absolute -top-1 -left-1 {{ color }} text-white text-xs font-bold px-2 py-1 rounded">{{
+                                loop.index }}</span>
                         </div>
                         <div class="ml-3 w-full overflow-hidden">
-                            <h4 class="text-sm font-medium text-gray-800  hover:text-gray-800 group-hover:text-indigo-600 transition truncate">
+                            <h4
+                                class="text-sm font-medium text-gray-800  hover:text-gray-800 group-hover:text-indigo-600 transition truncate">
                                 <a href="/post/{{post.id}}">{{ post.title }}</a>
                             </h4>
                             <div class="flex items-center text-xs text-gray-500 mt-1">
@@ -251,9 +274,13 @@
                 </h3>
                 <div class="space-y-2">
                     {% for category in categories %}
-                    <a href="?category={{category.name}}" class="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg {{ 'hover:' if request.args.get("category") != category.name }}bg-indigo-50 group">
-                        <span class="text-gray-700 group-hover:text-indigo-600">{{ category.name or "Non disponibile" }}</span>
-                        <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2 py-0.5 rounded-full">{{category.posts|length}}</span>
+                    <a href="?category={{category.name}}"
+                        class="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg {{ 'hover:' if request.args.get("
+                        category") !=category.name }}bg-indigo-50 group">
+                        <span class="text-gray-700 group-hover:text-indigo-600">{{ category.name or "Non disponibile"
+                            }}</span>
+                        <span
+                            class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2 py-0.5 rounded-full">{{category.posts|length}}</span>
                     </a>
                     {% endfor %}
                 </div>
@@ -266,7 +293,9 @@
                 </h3>
                 <div class="flex flex-wrap gap-2">
                     {% for tag in tags %}
-                    <a href="?tags={{tag.tag}}" class="bg-gray-100 text-gray-800 text-sm px-3 py-1 rounded-full {{ 'hover:bg-gray-200' if not (tag.tag in request.args.getlist('tags')) else 'bg-gray-600 text-white'  }}">#{{ tag.tag }}</a>
+                    <a href="?tags={{tag.tag}}"
+                        class="bg-gray-100 text-gray-800 text-sm px-3 py-1 rounded-full {{ 'hover:bg-gray-200' if not (tag.tag in request.args.getlist('tags')) else 'bg-gray-600 text-white'  }}">#{{
+                        tag.tag }}</a>
                     {% endfor %}
                 </div>
             </div>
@@ -275,29 +304,29 @@
 </div>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $("#sidebar-tags a").on("click", function (e) {
             e.preventDefault();
-            
-            
+
+
             tag = decodeURI(this.href.split("?")[1].split("=")[1])
             let params = new URL(document.location.toString()).searchParams;
 
-            if (params.getAll("tags").includes(tag)){
+            if (params.getAll("tags").includes(tag)) {
                 params.delete("tags", tag)
-            }else{
+            } else {
                 params.append("tags", tag)
             }
-            
-            console.log("p",params.getAll("tags"))
 
-            
-            window.location.href =  window.location.origin + window.location.pathname + "?" + params.toString();
+            console.log("p", params.getAll("tags"))
+
+
+            window.location.href = window.location.origin + window.location.pathname + "?" + params.toString();
 
             // window.location = window.location + "&" + url[1]
         });
 
-        $.get(`${backend_url}/tag/`).done(function(tags){
+        $.get(`{{backend_url}}/tag`).done(function (tags) {
             tags = tags["result"]
             console.log(tags)
 
@@ -309,90 +338,90 @@
             const $selectedTagsContainer = $('#selectedTagsContainer');
             const $selectedTagsList = $('#selectedTagsList');
             const $clearAllTags = $('#clearAllTags');
-            
+
             let selectedTags = [];
 
             let params = new URL(document.location.toString()).searchParams;
             let alreadySelectedTags = params.getAll("tags").map(tag_ => {
                 return tags.filter(x => x.tag == tag_)[0].id
             })
-            
-            if (alreadySelectedTags.length > 0){ selectedTags = alreadySelectedTags }
+
+            if (alreadySelectedTags.length > 0) { selectedTags = alreadySelectedTags }
 
             // Mostra i tag disponibili nel dropdown
             function renderTagDropdown(filter = '') {
                 $tagDropdown.empty();
-                
-                const filteredTags = tags.filter(tag => 
-                    !selectedTags.includes(tag.id) && 
+
+                const filteredTags = tags.filter(tag =>
+                    !selectedTags.includes(tag.id) &&
                     tag.tag.toLowerCase().includes(filter.toLowerCase())
                 );
-                
+
                 if (filteredTags.length === 0) {
                     $tagDropdown.append(
                         $('<div>').addClass('tag-dropdown-item text-gray-500').text('Nessun tag trovato')
                     );
                 } else {
-                    $.each(filteredTags, function(index, tag) {
+                    $.each(filteredTags, function (index, tag) {
                         const $tagElement = $('<div>')
                             .addClass('tag-dropdown-item')
                             .html(`<i class="fas fa-tag"></i> ${tag.tag}`)
                             .data('id', tag.id)
-                            .on('click', function() {
+                            .on('click', function () {
                                 selectTag(tag.id, tag.tag);
                                 $tagInput.val('');
                                 $tagDropdown.hide();
                             });
-                        
+
                         $tagDropdown.append($tagElement);
                     });
                 }
-                
+
                 if (filter.length > 0 || filteredTags.length > 0) {
                     $tagDropdown.show();
                 } else {
                     $tagDropdown.hide();
                 }
             }
-            
+
             // Seleziona un tag
             function selectTag(id, name) {
                 if (!selectedTags.includes(id)) {
                     selectedTags.push(id);
                     updateSelectedTagsUI();
-                    
+
                     // Aggiungi il tag selezionato all'input container
                     const $selectedTagElement = $('<div>')
                         .addClass('tag-item selected')
                         .html(`${name} <i class="fas fa-times ml-1"></i>`)
                         .data('id', id)
-                        .on('click', function(e) {
+                        .on('click', function (e) {
                             e.stopPropagation();
                             removeTag(id);
                         });
                 }
             }
-            
+
             // Rimuovi un tag
             function removeTag(id) {
                 selectedTags = selectedTags.filter(tagId => tagId !== id);
                 updateSelectedTagsUI();
-                
+
                 // Rimuovi il tag dall'input container
                 $(`.tag-item[data-id="${id}"]`).remove();
             }
-            
+
             // Aggiorna la lista dei tag selezionati
             function updateSelectedTagsUI() {
                 $selectedTagsList.empty();
 
                 console.log(selectedTags)
-                
+
                 if (selectedTags.length > 0) {
                     $selectedTagsContainer.removeClass('hidden');
                     $clearTags.removeClass('hidden');
-                    
-                    $.each(selectedTags, function(index, tagId) {
+
+                    $.each(selectedTags, function (index, tagId) {
                         const tag = tags.find(t => t.id === tagId);
                         console.log(tagId)
                         if (tag) {
@@ -400,11 +429,11 @@
                                 .addClass('tag-item selected')
                                 .html(`${tag.tag} <i class="fas fa-times ml-1"></i>`)
                                 .data('id', tag.id)
-                                .on('click', function(e) {
+                                .on('click', function (e) {
                                     e.stopPropagation();
                                     removeTag(tag.id);
                                 });
-                            
+
                             $selectedTagsList.append($tagElement);
                         }
                     });
@@ -413,20 +442,20 @@
                     $clearTags.addClass('hidden');
                 }
             }
-            
+
             // Event listeners
-            $tagInput.on('input', function() {
+            $tagInput.on('input', function () {
                 renderTagDropdown($(this).val());
             });
-            
-            $tagInput.on('keydown', function(e) {
+
+            $tagInput.on('keydown', function (e) {
                 if (e.key === 'Enter' && $(this).val().trim() !== '') {
                     const inputValue = $(this).val().trim().toLowerCase();
-                    const existingTag = tags.find(tag => 
-                        tag.tag.toLowerCase() === inputValue && 
+                    const existingTag = tags.find(tag =>
+                        tag.tag.toLowerCase() === inputValue &&
                         !selectedTags.includes(tag.id)
                     );
-                    
+
                     if (existingTag) {
                         selectTag(existingTag.id, existingTag.tag);
                         $(this).val('');
@@ -434,20 +463,20 @@
                     }
                 }
             });
-            
-            $clearTags.on('click', function() {
+
+            $clearTags.on('click', function () {
                 $tagInput.val('');
                 $tagDropdown.hide();
             });
-            
-            $clearAllTags.on('click', function() {
+
+            $clearAllTags.on('click', function () {
                 selectedTags = [];
                 updateSelectedTagsUI();
                 $('.tag-item.selected').remove();
             });
-            
+
             // Chiudi il dropdown quando si clicca fuori
-            $(document).on('click', function(e) {
+            $(document).on('click', function (e) {
                 setTimeout(() => {
                     if (
                         !$tagFilter.is(e.target) && $tagFilter.has(e.target).length === 0 &&
@@ -457,7 +486,7 @@
                     }
                 }, 0); // posticipa alla fine del ciclo evento
             });
-            
+
             // Inizializza
             updateSelectedTagsUI();
         })
@@ -465,12 +494,12 @@
 </script>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         console.log("Okkk!")
-        $("#search-post-filter").click(function(){
+        $("#search-post-filter").click(function () {
             text = $("#search-post-text").val()
             cat = $("#search-post-category").val()
-            tags = $("#selectedTagsList .tag-item").map(function(idx, elem){
+            tags = $("#selectedTagsList .tag-item").map(function (idx, elem) {
                 return $(elem).text().trim()
             }).get()
 
@@ -480,18 +509,18 @@
                 style: "display: none"
             });
 
-            if (text.length > 0){
+            if (text.length > 0) {
                 $('<input>', {
                     type: "hidden",
-                    name : "text",
+                    name: "text",
                     value: text
                 }).appendTo($form)
             }
 
-            if(cat.length > 0){
+            if (cat.length > 0) {
                 $('<input>', {
                     type: "hidden",
-                    name : "category",
+                    name: "category",
                     value: cat
                 }).appendTo($form)
             }
@@ -500,7 +529,7 @@
             tags.forEach(tag => {
                 $('<input/>', {
                     type: "hidden",
-                    name : "tags",
+                    name: "tags",
                     value: tag
                 }).appendTo($form)
             })

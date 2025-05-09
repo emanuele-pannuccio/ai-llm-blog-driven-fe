@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +10,16 @@
     <!-- Stili personalizzati -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
+
     {% block styles %}{% endblock %}
-    
+
     {% block script_head %}{% endblock %}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    {%if backend_url %} 
     <script>
         var backend_url = '{{backend_url}}'
+    </script>
+    <script>
         const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -28,20 +31,42 @@
                 toast.onmouseleave = Swal.resumeTimer;
             }
         });
+    </script>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    {% if user is defined %}
+    <script>
+        const REFRESH_INTERVAL = 10 * 60 * 1000; // ogni 10 minuti
+        const refresh_int = setInterval(() => {
+            if (document.hidden) return;
+
+            fetch(backend_url + '/token/refresh', {
+                method: 'POST',
+                credentials: 'include', // importante per inviare i cookie
+            }).then(res => {
+                if (res.status === 200) {
+                    console.log('Token refreshed');
+                } else if (res.status === 401) {
+                    window.location = "/"
+                }
+            }).catch(err => {
+                console.error('Refresh error', err);
+            });
+        }, REFRESH_INTERVAL);
     </script>
     {%endif%}
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+
         body {
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
         }
     </style>
 </head>
+
 <body class="bg-gray-50 text-gray-800 h-full w-full">
     <div class="flex h-screen overflow-hidden">
         {% include 'partials/admin/sidebar.admin.html' %}
@@ -51,4 +76,5 @@
     </div>
     {% block scripts %}{% endblock %}
 </body>
+
 </html>

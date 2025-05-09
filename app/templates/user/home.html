@@ -1,0 +1,81 @@
+{% extends 'bases/base.html' %}
+
+{% block title %} - Homepage {% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="bg-gradient-to-r from-blue-50 to-purple-50 py-16 md:py-24">
+    <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto text-center animate-fade-in">
+            <span class="inline-block bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm font-medium mb-4">Ultime
+                novità</span>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Esplora il mondo attraverso le nostre storie
+            </h1>
+            <p class="text-lg text-gray-600 mb-8">Scopri articoli approfonditi, guide pratiche e riflessioni su
+                tecnologia, design, viaggi e molto altro.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Latest Posts -->
+<section class="py-12 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+            <h2 class="text-2xl font-bold mb-4 md:mb-0 flex items-center">
+                <span class="w-4 h-4 bg-blue-500 rounded-full mr-3"></span>
+                Ultimi articoli
+            </h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            {% for post in latest_posts %}
+            <article class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-300">
+                <div class="flex flex-col lg:flex-row w-full">
+                    <div class="lg:w-1/3">
+                        <img src="{{ post.image }}" alt="Latest post" class="w-full h-full object-cover">
+                    </div>
+                    <div class="lg:w-2/3 px-6 py-4 flex flex-col h-full">
+                        <div class="flex items-center text-xs text-gray-500 mb-2">
+                            <span>{{ post.user.name }}</span>
+                            <span class="mx-2">•</span>
+                            <span>{{ post.created_at }}</span>
+                            <span class="ml-auto"><i class="far fa-clock mr-1"></i> {{ post.read_time }}</span>
+                        </div>
+                        <h3 class="text-lg font-bold hover:text-blue-500 transition truncate mt-1">
+                            <a href="/post/{{ post.id }}">{{ post.title }}</a>
+                        </h3>
+                        <zero-md class="mb-4 text-sm line-clamp-4">
+                            <script type="text/markdown">{{ post.body }}</script>
+                            <template data-append>
+                                <style>
+                                    p {
+                                        color: rgb(125, 123, 123);
+                                    }
+                                </style>
+                            </template>
+                        </zero-md>
+                        <div class="flex justify-between items-center mt-auto">
+                            <span class="bg-purple-100 text-purple-600 px-2 py-1 rounded text-xs font-medium">#{{
+                                post.category }}</span>
+                            <a href="/post/{{ post.id }}"
+                                class="text-blue-500 hover:text-blue-700 text-xs font-medium transition ml-auto">
+                                Leggi tutto →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-10">
+            <a href="/posts"
+                class="border border-blue-500 text-blue-500 hover:bg-blue-50 px-6 py-2 rounded-full font-medium transition">
+                Vedi altri articoli
+            </a>
+        </div>
+    </div>
+</section>
+
+{%endblock%}

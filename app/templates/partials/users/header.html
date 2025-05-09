@@ -3,17 +3,21 @@
     .dropdown:hover .dropdown-menu {
         display: block;
     }
+
     .post-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
     }
+
     .category-badge {
         transition: all 0.2s ease;
     }
+
     .post-card:hover .category-badge {
         background-color: #3B82F6;
         color: white;
     }
+
     .user-dropdown {
         display: none;
         position: absolute;
@@ -25,25 +29,30 @@
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         z-index: 50;
     }
+
     .user-dropdown a {
         display: block;
         padding: 0.5rem 1rem;
         color: #4b5563;
         font-size: 0.875rem;
     }
+
     .user-dropdown a:hover {
         background-color: #f3f4f6;
         color: #1f2937;
     }
+
     .user-dropdown.show {
         display: block;
     }
+
     /* Stili personalizzati per il carosello */
     .swiper {
         width: 100%;
         height: 100%;
         margin-bottom: 2rem;
     }
+
     .swiper-slide {
         text-align: center;
         font-size: 18px;
@@ -55,25 +64,30 @@
         overflow: hidden;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
+
     .swiper-slide img {
         display: block;
         width: 100%;
         height: 200px;
         object-fit: cover;
     }
+
     .swiper-pagination-bullet {
         width: 12px;
         height: 12px;
         background-color: #fff;
         opacity: 0.5;
     }
+
     .swiper-pagination-bullet-active {
         opacity: 1;
         background-color: #3B82F6;
     }
-    .swiper-button-next, .swiper-button-prev {
+
+    .swiper-button-next,
+    .swiper-button-prev {
         color: #3B82F6;
-        background-color: rgba(255,255,255,0.8);
+        background-color: rgba(255, 255, 255, 0.8);
         width: 40px;
         height: 40px;
         border-radius: 50%;
@@ -82,10 +96,13 @@
         justify-content: center;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
-    .swiper-button-next::after, .swiper-button-prev::after {
+
+    .swiper-button-next::after,
+    .swiper-button-prev::after {
         font-size: 1.2rem;
         font-weight: bold;
     }
+
     .popular-badge {
         position: absolute;
         top: 10px;
@@ -98,6 +115,7 @@
         font-weight: bold;
         z-index: 10;
     }
+
     .tag {
         display: inline-block;
         margin: 0.2rem;
@@ -108,14 +126,17 @@
         font-size: 0.8rem;
         transition: all 0.2s ease;
     }
+
     .tag:hover {
         background-color: #3B82F6;
         color: white;
     }
+
     .sidebar {
         position: sticky;
         top: 1rem;
     }
+
     @media (max-width: 1023px) {
         .sidebar {
             display: none;
@@ -124,7 +145,7 @@
 </style>
 <!-- Header -->
 
-
+{{ user.role if not user is defined else '' }}
 <header class="bg-white shadow-sm">
     <div class="container mx-auto px-4 py-4">
         <div class="flex justify-between items-center">
@@ -142,49 +163,54 @@
                 <button id="openMobileMenu" class="md:hidden text-gray-600">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
-                <a href="/login" class="hidden md:{{ "hidden" if logged else "block"}} bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full transition  ">
+                <a href="/login" class="hidden md:{{ " hidden" if user !=None else "block" }} bg-blue-500
+                    hover:bg-blue-600 text-white px-4 py-2 rounded-full transition ">
                     Login
                 </a>
-                <div class="md:{{ "hidden" if not logged else "relative"}}">
+                <div class=" md:{{ "hidden" if not user !=None else "relative" }}">
                     <button id="user-menu-button" class="hidden md:block">
-                        <img src="{{ user.image if user is defined else "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"}}" alt="Profilo" class="w-8 h-8 rounded-full object-cover">
+                        <img src="{{ user.image if user.image != None else "
+                            https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"}}" alt="Profilo"
+                            class="w-8 h-8 rounded-full object-cover">
                     </button>
                     <div id="user-dropdown" class="user-dropdown">
-                        {% if user is defined and user.role == 'admin' %}
-                            <a href="/admin/dashboard" class="flex items-center">
-                                <i class="fas fa-gear mr-2"></i> Administration
-                            </a>
-                        {% endif  %}
+                        {% if user !=None and user.role == 'admin' %}
+                        <a href="/admin/dashboard" class="flex items-center">
+                            <i class="fas fa-gear mr-2"></i> Administration
+                        </a>
+                        {% endif %}
                         <a href="/logout" class="flex items-center">
                             <i class="fas fa-sign-out-alt mr-2"></i> Logout
                         </a>
                     </div>
-                </div>
             </div>
         </div>
-        <!-- MOBILE MENU -->
-        <div class="fixed z-40 bg-white h-full w-full inset-0 hidden" id="mobile-menu">
-            <div class="flex flex-col space-y-6 p-10 justify-between items-center">
-                <div class="flex flex-row w-full">
-                    <div class="ml-auto flex items-center space-x-2">
-                        <div class="w-8 h-8 bg-blue-500 rounded-full flex">
-                            <i class="fa fa-cloud mx-auto my-auto block text-white text-sm" aria-hidden="true"></i>
-                        </div>
-                        <span class="text-xl font-bold gradient-text pointer-events-none select-none">CloudDive</span>
+    </div>
+    <!-- MOBILE MENU -->
+    <div class="fixed z-40 bg-white h-full w-full inset-0 hidden" id="mobile-menu">
+        <div class="flex flex-col space-y-6 p-10 justify-between items-center">
+            <div class="flex flex-row w-full">
+                <div class="ml-auto flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex">
+                        <i class="fa fa-cloud mx-auto my-auto block text-white text-sm" aria-hidden="true"></i>
                     </div>
-                    <button id="closeMobileMenu" class="ml-auto text-gray-600">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
+                    <span class="text-xl font-bold gradient-text pointer-events-none select-none">CloudDive</span>
                 </div>
-                <a href="/" class="text-gray-600 hover:text-blue-600">Home</a>
-                <a href="/posts" class="text-gray-600 hover:text-blue-600">Posts</a>
-                <a href="/login" class="{{ "" if not logged else "hidden"}} bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full transition  ">
+                <button id="closeMobileMenu" class="ml-auto text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <a href="/" class="text-gray-600 hover:text-blue-600">Home</a>
+            <a href="/posts" class="text-gray-600 hover:text-blue-600">Posts</a>
+            <a href="/login" class="{{ "" if not user !=None else " hidden"}} bg-blue-500 hover:bg-blue-600 text-white
+                px-4 py-2 rounded-full transition ">
                     Login
                 </a>
-                {% if user is defined and user.role == 'admin' %}
-                    <a href="/admin" class="text-gray-600 hover:text-blue-600">Administration</a>
-                {% endif  %}
-                <a href="/logout" class="{{ "" if logged else "hidden"}} bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full transition  ">
+                {% if user !=None and user.role == 'admin' %}
+                    <a href=" /admin" class="text-gray-600 hover:text-blue-600">Administration</a>
+            {% endif %}
+            <a href="/logout" class="{{ "" if user !=None else " hidden"}} bg-blue-500 hover:bg-blue-600 text-white px-4
+                py-2 rounded-full transition ">
                     Logout
                 </a>
             </div>
@@ -197,37 +223,32 @@
     const userMenuButton = document.getElementById('user-menu-button');
     const userDropdown = document.getElementById('user-dropdown');
 
-    userMenuButton.addEventListener('click', function(e) {
+    userMenuButton.addEventListener('click', function (e) {
         e.stopPropagation();
         userDropdown.classList.toggle('show');
     });
 
     // Close dropdown when clicking outside
-    document.addEventListener('click', function() {
+    document.addEventListener('click', function () {
         userDropdown.classList.remove('show');
     });
 
     // Prevent dropdown from closing when clicking inside it
-    userDropdown.addEventListener('click', function(e) {
+    userDropdown.addEventListener('click', function (e) {
         e.stopPropagation();
     });
 
     // Mobile menu toggle (da implementare)
-    $(document).ready(function(){
-        $('#openMobileMenu, #closeMobileMenu').click(function() {
+    $(document).ready(function () {
+        $('#openMobileMenu, #closeMobileMenu').click(function () {
             // Logica per aprire/chiudere il menu mobile
-            $("#mobile-menu").toggleClass("hidden")
+            $(" #mobile-menu").toggleClass("hidden")
         });
-    })
-
-    // Highlight current category (esempio)
-    const urlParams = new URLSearchParams(window.location.search);
-    const category = urlParams.get('category');
-    
-    if(category) {
-        const categoryLinks = document.querySelectorAll('.dropdown-menu a');
-        categoryLinks.forEach(link => {
-            if(link.textContent.toLowerCase() === category.toLowerCase()) {
+    }) // Highlight current category (esempio) const urlParams=new
+    URLSearchParams(window.location.search); const category = urlParams.get('category'); if (category) {
+        const
+        categoryLinks = document.querySelectorAll('.dropdown-menu a'); categoryLinks.forEach(link => {
+            if (link.textContent.toLowerCase() === category.toLowerCase()) {
                 link.classList.add('bg-blue-50', 'text-blue-600');
             }
         });
