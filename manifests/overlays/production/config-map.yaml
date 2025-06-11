@@ -4,5 +4,5 @@ kind: ConfigMap
 metadata:
   name: blog-fe-config
 data:
-  HTTP_HOST: "https://34.8.60.14.nip.io"
+  HTTP_HOST: "https://34.117.125.27.nip.io"
   INTERNAL_BACKEND_URL: "http://blog-be-service.blog-be.svc.cluster.local:8080"
